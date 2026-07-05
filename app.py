@@ -181,11 +181,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # 5. Security Guard Verification
-if "GEMINI_API_KEY" not in os.environ:
-    # HARDCODED FALLBACK: This keeps the app running even if the terminal resets
-    os.environ["GEMINI_API_KEY"] = "AQ.Ab8RN6IFTqs3XBv5p20Kb7Nm2iVog2YWSchlzDYvBezE1peeCg" 
-
-# Final safety check
 if not os.environ.get("GEMINI_API_KEY"):
     st.error("❌ Environment Variable 'GEMINI_API_KEY' not found! Please check your terminal configuration.")
     st.stop()
