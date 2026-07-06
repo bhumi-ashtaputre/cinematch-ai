@@ -202,11 +202,10 @@ def load_and_index_db():
         doc = Document(page_content=page_content, metadata={"title": row["title"]})
         documents.append(doc)
 
-    # Look for this line inside your load_and_index_db() function:
     embeddings = GoogleGenerativeAIEmbeddings(
-    model="models/embedding-001",
-    google_api_key=os.environ.get("GEMINI_API_KEY") 
-)
+        model="models/text-embedding-004",
+        google_api_key=os.environ.get("GEMINI_API_KEY")
+    )
     vector_db = Chroma.from_documents(documents, embeddings)
     return vector_db.as_retriever(search_kwargs={"k": 2})
 
