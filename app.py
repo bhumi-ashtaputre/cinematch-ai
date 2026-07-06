@@ -1,4 +1,5 @@
 import os
+import time
 import streamlit as st
 import pandas as pd
 from langchain_core.documents import Document
@@ -206,7 +207,20 @@ def load_and_index_db():
         model="gemini-embedding-001",
         google_api_key=os.environ.get("GEMINI_API_KEY")
     )
-    vector_db = Chroma.from_documents(documents, embeddings)
+
+    # Embed in batches of 50 to stay under free tier rate limit (100 req/min)
+    batch_size = 50
+    vector_db = None
+    for i in range(0, len(documents), batch_size):
+        batch = documents[i:i + batch_size]
+        if vector_db is None:
+            vector_db = Chroma.from_documents(batch, embeddings)
+        else:
+            vector_db.add_documents(batch)
+        # Pause between batches to respect rate limits
+        if i + batch_size < len(documents):
+            time.sleep(61)
+
     return vector_db.as_retriever(search_kwargs={"k": 2})
 
 # Initialize components
