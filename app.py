@@ -180,10 +180,12 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# 5. Security Guard Verification
-if not os.environ.get("GEMINI_API_KEY"):
-    st.error("❌ Environment Variable 'GEMINI_API_KEY' not found! Please check your terminal configuration.")
+# 5. Security Guard Verification — works on both local (.env) and Streamlit Cloud (Secrets)
+api_key = os.environ.get("GEMINI_API_KEY") or st.secrets.get("GEMINI_API_KEY")
+if not api_key:
+    st.error("❌ 'GEMINI_API_KEY' not found! Set it in your environment or in Streamlit Secrets.")
     st.stop()
+os.environ["GEMINI_API_KEY"] = api_key
 
 # 6. Production Ingestion Engine Layer
 @st.cache_resource
