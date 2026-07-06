@@ -203,7 +203,7 @@ def load_and_index_db():
         documents.append(doc)
 
     embeddings = GoogleGenerativeAIEmbeddings(
-        model="models/text-embedding-004",
+        model="gemini-embedding-001",
         google_api_key=os.environ.get("GEMINI_API_KEY")
     )
     vector_db = Chroma.from_documents(documents, embeddings)
