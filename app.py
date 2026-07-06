@@ -210,9 +210,13 @@ def load_and_index_db():
     return vector_db.as_retriever(search_kwargs={"k": 2})
 
 # Initialize components
-retriever = load_and_index_db()
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.5)
-rag_chain = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
+try:
+    retriever = load_and_index_db()
+    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.5)
+    rag_chain = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=retriever)
+except Exception as e:
+    st.error(f"🔴 Initialization failed: {type(e).__name__}: {e}")
+    st.stop()
 
 # 7. Session State Chat History Memory
 if "chat_history" not in st.session_state:
